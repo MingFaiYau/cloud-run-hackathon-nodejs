@@ -54,7 +54,7 @@ const attaciDirectly = (mapWithUser, dims, self) => {
 		case 'N':
 			// x
 			// y --
-			for (let i = y - 1; i <= y - ATTACK_RANGE; i--) {
+			for (let i = y - 1; i >= y - ATTACK_RANGE; i--) {
 				if (i < 0) return false
 				if (mapWithUser[`${x}:${i}`]) return true
 			}
@@ -78,16 +78,12 @@ const attaciDirectly = (mapWithUser, dims, self) => {
 		case 'W':
 			// x--
 			// y
-			for (let i = x - 1; i <= x + ATTACK_RANGE; i--) {
+			for (let i = x - 1; i >= x - ATTACK_RANGE; i--) {
 				if (i < 0) return false
 				if (mapWithUser[`${i}:${y}`]) return true
 			}
 			return false
 	}
-}
-
-const isBound = (dims, self) => {
-  return false
 }
 
 app.post('/', function (req, res) {
@@ -98,6 +94,11 @@ app.post('/', function (req, res) {
 	const mapWithUser = buildMapWithUser(state, selfHref)
 
 	const self = state[selfHref]
+	if (self.wasHit) {
+    console.log('run')
+		//TODO: run
+	}
+
 	if (attaciDirectly(mapWithUser, dims, self)) {
 		console.log('attack')
 		res.send('T')
