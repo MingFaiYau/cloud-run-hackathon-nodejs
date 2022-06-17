@@ -40,7 +40,8 @@ let previousScore = null
 const buildMapWithUser = (state, selfHref) => {
 	const map = {}
 	Object.keys(state).forEach((key) => {
-		if (key !== selfHref) map[`${key.x}:${key.y}`] = key
+    const player = state[key]
+		if (key !== selfHref) map[`${player.x}:${player.y}`] = player
 	})
 	return map
 }
