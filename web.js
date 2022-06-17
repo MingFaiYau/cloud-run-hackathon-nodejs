@@ -121,8 +121,9 @@ app.post('/', function (req, res) {
 	if (attaciDirectly(mapWithUser, dims, self)) {
 		console.log('attack')
 		res.send('T')
-	}
-	res.send(ACTIONS[Math.floor(Math.random() * ACTIONS.length)])
+	} else {
+    res.send(ACTIONS[Math.floor(Math.random() * ACTIONS.length)])
+  }
 })
 
 app.listen(process.env.PORT || 8080)
