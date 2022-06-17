@@ -34,10 +34,8 @@ curl -d '{
 */
 
 app.post('/', function (req, res) {
-	const response = JSON.stringify(req.body)
-
-	const selfHref = response._links.self.href
-	const arena = response.arena
+	const selfHref = req.body._links.self.href
+	const arena = req.body.arena
 	const state = arena.state
 	const mapSize = arena.dims
 
