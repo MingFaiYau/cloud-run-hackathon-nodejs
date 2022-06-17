@@ -33,17 +33,20 @@ curl -d '{
 
 */
 
+const ACTIONS = ['F', 'T', 'L', 'R']
+const DIRECTION = ['N', 'S', 'E', 'W']
+
 app.post('/', function (req, res) {
 	const selfHref = req.body._links.self.href
 	const arena = req.body.arena
 	const state = arena.state
-	const mapSize = arena.dims
+	const mapSizeX = arena.dims[0]
+	const mapSizeY = arena.dims[1]
 
 	const self = state[selfHref]
 	console.log('mine', self)
 
-	const moves = ['F', 'T', 'L', 'R']
-	res.send(moves[Math.floor(Math.random() * moves.length)])
+	res.send('T')
 })
 
 app.listen(process.env.PORT || 8080)
