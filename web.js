@@ -86,16 +86,35 @@ const attaciDirectly = (mapWithUser, dims, self) => {
 	}
 }
 
+const isBound = (self, dims) => {
+	const mapX = dims[0]
+	const mapY = dims[1]
+
+	const { x, y, direction } = self
+	if (x === 0) {
+	}
+
+	if (x === mapX) {
+	}
+
+	if (y === 0) {
+	}
+
+	if (y === mapY) {
+	}
+}
+
 app.post('/', function (req, res) {
 	const selfHref = req.body._links.self.href
 	const arena = req.body.arena
 	const dims = arena.dims
 	const state = arena.state
 	const mapWithUser = buildMapWithUser(state, selfHref)
+	console.log('mapWithUser', mapWithUser)
 
 	const self = state[selfHref]
 	if (self.wasHit) {
-    console.log('run')
+		console.log('run')
 		//TODO: run
 	}
 
