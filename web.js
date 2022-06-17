@@ -35,6 +35,8 @@ curl -d '{
 
 const ACTIONS = ['F', 'T', 'L', 'R']
 const DIRECTION = ['N', 'S', 'E', 'W']
+const ATTACK_RANGE = 3
+let previousScore = null
 
 app.post('/', function (req, res) {
 	const selfHref = req.body._links.self.href
@@ -45,8 +47,14 @@ app.post('/', function (req, res) {
 
 	const self = state[selfHref]
 	console.log('mine', self)
+	console.log('mine', previousScore)
 
-	res.send('T')
+  if ( previousScore === null || previousScore !==  self.score ) {
+    // TODO: socre changed
+    previousScore = self.score
+  } 
+
+	res.send(ACTIONS[Math.floor(Math.random() * ACTIONS.length)])
 })
 
 app.listen(process.env.PORT || 8080)
