@@ -33,27 +33,75 @@ curl -d '{
 
 */
 
-const ACTIONS = ['F', 'T', 'L', 'R']
-const DIRECTION = ['N', 'S', 'E', 'W']
+const ACTIONS = ['F', 'L', 'R']
 const ATTACK_RANGE = 3
 let previousScore = null
+
+const buildMapWithUser = (state, selfHref) => {
+	const map = {}
+	Object.keys(state).forEach((key) => {
+		if (key !== selfHref) map[`${key.x}:${key.y}`] = key
+	})
+	return map
+}
+
+const attaciDirectly = (mapWithUser, dims, self) => {
+	const mapX = dims[0]
+	const mapY = dims[1]
+
+	const { x, y, direction } = self
+	switch (direction) {
+		case 'N':
+			// x
+			// y --
+			for (let i = y - 1; i <= y - ATTACK_RANGE; i--) {
+				if (i < 0) return false
+				if (mapWithUser[`${x}:${i}`]) return true
+			}
+			return false
+		case 'S':
+			// x
+			// y ++
+			for (let i = y + 1; i <= y + ATTACK_RANGE; i++) {
+				if (i > mapY) return false
+				if (mapWithUser[`${x}:${i}`]) return true
+			}
+			return false
+		case 'E':
+			// x ++
+			// y
+			for (let i = x + 1; i <= x + ATTACK_RANGE; i++) {
+				if (i > mapX) return false
+				if (mapWithUser[`${i}:${y}`]) return true
+			}
+			return false
+		case 'W':
+			// x--
+			// y
+			for (let i = x - 1; i <= x + ATTACK_RANGE; i--) {
+				if (i < 0) return false
+				if (mapWithUser[`${i}:${y}`]) return true
+			}
+			return false
+	}
+}
+
+const isBound = (dims, self) => {
+  return false
+}
 
 app.post('/', function (req, res) {
 	const selfHref = req.body._links.self.href
 	const arena = req.body.arena
+	const dims = arena.dims
 	const state = arena.state
-	const mapSizeX = arena.dims[0]
-	const mapSizeY = arena.dims[1]
+	const mapWithUser = buildMapWithUser(state, selfHref)
 
 	const self = state[selfHref]
-	console.log('mine', self)
-	console.log('mine', previousScore)
-
-  if ( previousScore === null || previousScore !==  self.score ) {
-    // TODO: socre changed
-    previousScore = self.score
-  } 
-
+	if (attaciDirectly(mapWithUser, dims, self)) {
+		console.log('attack')
+		res.send('T')
+	}
 	res.send(ACTIONS[Math.floor(Math.random() * ACTIONS.length)])
 })
 
