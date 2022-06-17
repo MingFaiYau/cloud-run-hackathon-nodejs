@@ -33,14 +33,13 @@ curl -d '{
 
 */
 
-const ACTIONS = ['F', 'L', 'R']
+const ACTIONS = ['F', 'F', 'F', 'F', 'L', 'R']
 const ATTACK_RANGE = 3
-let previousScore = null
 
 const buildMapWithUser = (state, selfHref) => {
 	const map = {}
 	Object.keys(state).forEach((key) => {
-    const player = state[key]
+		const player = state[key]
 		if (key !== selfHref) map[`${player.x}:${player.y}`] = player
 	})
 	return map
@@ -90,20 +89,9 @@ const attaciDirectly = (mapWithUser, dims, self) => {
 const isBound = (self, dims) => {
 	const mapX = dims[0]
 	const mapY = dims[1]
-
-	const { x, y, direction } = self
-	if (x === 0) {
-	}
-
-	if (x === mapX) {
-	}
-
-	if (y === 0) {
-	}
-
-	if (y === mapY) {
-	}
 }
+
+const runAction = () => {}
 
 app.post('/', function (req, res) {
 	const selfHref = req.body._links.self.href
@@ -116,15 +104,16 @@ app.post('/', function (req, res) {
 	const self = state[selfHref]
 	if (self.wasHit) {
 		console.log('run')
-		//TODO: run
+		res.send(ACTIONS[Math.floor(Math.random() * ACTIONS.length)])
+		return
 	}
 
 	if (attaciDirectly(mapWithUser, dims, self)) {
 		console.log('attack')
 		res.send('T')
 	} else {
-    res.send(ACTIONS[Math.floor(Math.random() * ACTIONS.length)])
-  }
+		res.send(ACTIONS[Math.floor(Math.random() * ACTIONS.length)])
+	}
 })
 
 app.listen(process.env.PORT || 8080)
